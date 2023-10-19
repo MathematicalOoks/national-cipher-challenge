@@ -1,33 +1,30 @@
-baseAlphabet = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
 class Caesar:
-    def __init__(self, text):
-        self.text = text
-        self.frequent = 'e'
-        self.map = {}
 
-    def decode(self):
-        res = ""
-        maximum = 0
-        char = ''
-        for i in self.text:
-            if i not in baseAlphabet:
-                if i in self.map.keys():
-                    self.map[i] = self.map.get(i)+1
+    def decrypt(self, text):
+        plaintext = ""
+        char = text[0]
+        Map = {}
+        for i in text:
+            if 'A' <= i <= 'Z':
+                if i not in Map:
+                    Map[i] = 1
                 else:
-                    self.map[i] = 1
-                if self.map[i] > maximum:
+                    Map[i] += 1
+
+                if Map[i] > Map[char]:
                     char = i
-                    maximum = self.map[i]
-        diff = ord(self.frequent)-ord(char.lower())
-        for i in self.text:
-            if i not in baseAlphabet:
-                res += i
-            else:
-                if ord(i.lower()) + diff < 97:
-                    res += chr(123-(abs(diff)-(ord(i.lower())-97)))
-                elif ord(i.lower()) + diff > 122:
-                    res += chr(96+diff)
+
+        diff = ord('E') - ord(char)
+
+        for i in text:
+            if 'A' <= i <= 'Z':
+                if ord(i) + diff < ord('A'):
+                    plaintext += chr(ord('Z') + diff + ord(i) - ord('A'))
+                elif ord(i) + diff > ord('Z'):
+                    plaintext += chr(ord('A') + diff - (ord('Z') - ord(i) + 1))
                 else:
-                    res += chr(ord(i.lower())+diff)
-        return res
+                    plaintext += chr(ord(i) + diff)
+            else:
+                plaintext += i
+
+        return plaintext
