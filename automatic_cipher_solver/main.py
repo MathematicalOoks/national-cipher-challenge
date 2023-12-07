@@ -31,9 +31,7 @@ parent_key1, parent_key2, generate_child_key)
 best_key = ""
 
 
-def main():solver.return_best_key(iterations=10000000)
+best_score = -9999999
+key = solver.return_best_key(iterations=10, score_cutoff=best_score)
 
-if DEBUG:
-    run("main()")
-else:
-    main()
+best_score = scorer.calculate_score(key)
