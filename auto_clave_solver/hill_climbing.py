@@ -1,5 +1,6 @@
 from ciphertext_scorer import CipherTextScorer
 from autoclave import AutoClave
+import random
 
 scorer = CipherTextScorer(4)
 autoclave_solver = AutoClave()
@@ -13,17 +14,17 @@ best_key = ""
 
 for i in range(2, 20):
     fitness = original_fitness
-    parent_key = [chr(i + 65) for i in range(i)]
+    parent_key = [chr(j + 65) for j in range(i)]
     flag = False
 
     while not flag:
         flag = True
 
-        for i in range(len(parent_key)):
+        for y in range(i):
             child_key = parent_key.copy()
 
             for x in range(26):
-                child_key[i] = chr(x + 65)
+                child_key[y] = chr(x + 65)
                 new_fitness = scorer.calculate_score(autoclave_solver.decryption(ciphertext, child_key.copy()))
 
                 if new_fitness > fitness:
@@ -38,3 +39,4 @@ for i in range(2, 20):
 print("The best key was : " + ''.join(best_key))
 print("The best fitness was : " + str(best_fitness))
 print(autoclave_solver.decryption(ciphertext, best_key))
+
