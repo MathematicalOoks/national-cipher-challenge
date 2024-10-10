@@ -23,5 +23,5 @@ class Affine:
                     else:
                         plaintext += i
 
-                if "@" not in plaintext and "HOR" in plaintext:
+                if "@" not in plaintext:
                     print(plaintext, '\n')
