@@ -1,32 +1,27 @@
 class Affine:
-
     def modInverse(self, a, m):
-
         for x in range(1, m):
-            if (a % m) * (x % m) % m == 1:
+            if (a * x) % m == 1:
                 return x
         return -1
 
     def decrypt(self, text):
-        a = 1
-        b = 1
+        m = 26 
         plaintext = ""
 
-        while a < 27:
-            while b < 27:
+        for a in range(1, 27):
+            for b in range(0, 26):
+                inverse = self.modInverse(a, m)
+                if inverse == -1:
+                    continue
+                
+                plaintext = ""
                 for i in text:
                     if 'A' <= i <= 'Z':
-                        inverse = self.modInverse(a, 26)
-                        if inverse != -1:
-                            plaintext += chr(64+(inverse*(ord(i)-64-b)) % 26)
-                        else:
-                            plaintext += i
+                        decrypted_char = (inverse * ((ord(i) - 65) - b)) % m
+                        plaintext += chr(decrypted_char + 65)
                     else:
                         plaintext += i
-                b += 1
-                if "@" not in plaintext:
-                    print(plaintext)
-                plaintext = ""
-            a += 1
-            b = 1
-            plaintext = ""
+
+                if "@" not in plaintext and "HOR" in plaintext:
+                    print(plaintext, '\n')
