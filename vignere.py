@@ -1,49 +1,38 @@
-alphabet = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+def decrypt(text, key):
+    plain_text = []
+    key_index = 0
 
-
-class Vignere:
-
-    def generateKey(self, text, keyword):
-        key = list(keyword)
-        if len(text) == len(key):
-            return key
+    for i in range(len(text)):
+        if 'A' <= text[i] <= 'Z':
+            x = (ord(text[i]) - ord(key[key_index]) + 26) % 26
+            x += ord('A')
+            plain_text.append(chr(x))
+            key_index = (key_index + 1) % len(key)
         else:
-            for i in range(len(text) - len(key)):
-                key.append(key[i % len(key)])
-        return "".join(key)
+            plain_text.append(text[i])
 
-    def decryption(self, text, key):
-        plain_text = []
-        for i in range(len(text)):
-            if text[i].lower() in alphabet:
-                x = (ord(text[i]) - ord(key[i]) + 26) % 26
-                x += ord('A')
-                plain_text.append(chr(x))
-            else:
-                plain_text.append(text[i])
-        return "".join(plain_text)
+    return "".join(plain_text)
 
-    def findBestKeyLength(self, text):
-        english_ioc = 0.067
-        uniform_random_selection = 0.0385
-        ioc = self.indexOfCoincidence(text)
-        print(ioc)
-        return round((english_ioc - uniform_random_selection) / (ioc - uniform_random_selection))
+def findBestKeyLength(text):
+    english_ioc = 0.067
+    uniform_random_selection = 0.0385
+    ioc = indexOfCoincidence(text)
+    return round((english_ioc - uniform_random_selection) / (ioc - uniform_random_selection))
 
-    def indexOfCoincidence(self, text):
-        index = 0
-        frequency = {}
-        compressed_cipher_text = ""
-        for i in text:
-            if i.lower() in alphabet:
-                compressed_cipher_text += i
-        for i in compressed_cipher_text:
-            if i in frequency:
-                frequency[i] += 1
-            else:
-                frequency[i] = 1
-        for i in frequency:
-            index += frequency[i] * (frequency[i] - 1) / (
-                    len(compressed_cipher_text) * (len(compressed_cipher_text) - 1))
-        return index
+def indexOfCoincidence(text):
+    index = 0
+    frequency = {}
+    compressed_cipher_text = ""
+    for i in text:
+        if 'A' <= i <= 'Z':
+            compressed_cipher_text += i
+    for i in compressed_cipher_text:
+        if i in frequency:
+            frequency[i] += 1
+        else:
+            frequency[i] = 1
+    for i in frequency:
+        index += frequency[i] * (frequency[i] - 1) / (
+                len(compressed_cipher_text) * (len(compressed_cipher_text) - 1))
+        
+    return index
